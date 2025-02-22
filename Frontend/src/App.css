@@ -1,0 +1,31 @@
+/* Global CSS for App */
+.App {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;  /* Make the container fill the full height of the viewport */
+  text-align: center;  /* Center the text horizontally */
+  background-color: #FCF9F5; /* Optional background color */
+  font-family: 'Inter', 'Helvetica', 'sans-serif', 'Arial';
+}
+
+h1, h2, h3 {
+  margin: 10px 0; /* Add some margin to space out the headers */
+}
+
+/* Optional: You can also style each header with custom sizes or fonts */
+h1 {
+  font-size: 3rem;
+  color: #32313B;  /* Dark text color */
+}
+
+h2 {
+  font-size: 2rem;
+  color: #32313B;  /* Slightly lighter text color */
+}
+
+h3 {
+  font-size: 1.5rem;
+  color: #32313B;  /* Even lighter color for the smaller header */
+}

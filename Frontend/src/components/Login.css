@@ -1,0 +1,37 @@
+/* Login box container */
+.login-box {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    margin: 20px;
+    text-align: center;
+}
+
+.login-header {
+    font-size: 1.5rem;
+    color: #32313B;
+}
+
+.login-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Optional: Style the login button */
+.login-box button {
+    padding: 10px 20px;
+    background-color: #8D75E6;
+    border: none;
+    color: #fff;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.login-box button:hover {
+    background-color: #8063e9;
+}

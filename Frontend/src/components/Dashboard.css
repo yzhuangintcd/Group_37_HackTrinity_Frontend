@@ -1,0 +1,53 @@
+/* Dashboard.css */
+
+/* Parent container for two columns side by side on desktop */
+.dashboard-page {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    justify-content: center;
+    margin: 2rem auto;
+    max-width: 1200px;
+    /* optional max width */
+}
+
+/* Left column (User Dashboard) */
+.dashboard-card {
+    flex: 1;
+    background-color: #f0f0f0;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+/* Right column (Preferences) */
+.preferences-card {
+    flex: 1;
+    background-color: #f0f0f0;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+/* Switch to single-column layout for smaller screens */
+@media (max-width: 768px) {
+    .dashboard-page {
+        flex-direction: column;
+        /* stack columns vertically */
+        max-width: 600px;
+        /* optional narrower max width for mobile */
+    }
+
+    .dashboard-card,
+    .preferences-card {
+        margin-bottom: 1rem;
+        /* spacing between stacked sections */
+    }
+}
+
+.logout-button {
+    background-color: #8D75E6;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
