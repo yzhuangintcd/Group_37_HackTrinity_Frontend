@@ -1,7 +1,8 @@
+// vite.config.js
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
 export default defineConfig({
+  base: '/Group_37_HackTrinity_Frontend/', // Your repo name here
   plugins: [react()],
 })
