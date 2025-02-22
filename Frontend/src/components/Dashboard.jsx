@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Preferences from "./Preferences";
 import EmailPermissionModal from "./EmailPermissionModal";
 import "./Dashboard.css";
+import Chatbot from "./Chatbot";
 
 const randomPlaceholder = Math.floor(Math.random() * 100);  
 
@@ -102,6 +103,7 @@ const Dashboard = ({ user, priorities, onLogout }) => {
           onCancel={handleCancelPermission} 
         />
       )}
+      <Chatbot />
     </div>
   );
 };
