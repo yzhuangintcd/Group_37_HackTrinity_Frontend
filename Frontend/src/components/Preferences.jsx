@@ -24,8 +24,11 @@ const handleSubmit = (e) => {
 
     return (
     <div className="preferences-container">
+      {/* // TODO: Allow user to set their priorities, and reset their priorities */}
     <h2>{localStorage.getItem('userPriorities') ? 'Reset Your Priorities' : 'Set Your Priorities'}</h2>
 
+    {/* // TODO: Allow user to set their priorities, and reset their priorities, from the input box and chatbot*/}
+    {/* // TODO: Store the priorities in the backend database*/}
     <form onSubmit={handleSubmit}>
         <div className="priority-input-box">
         <label className="priority-input-message">
@@ -41,11 +44,10 @@ const handleSubmit = (e) => {
         </div>
 
         <br />
-        {/* <button type="submit" className="save-button">Save Preferences</button> */}
+        {/* // TODO: Save the preferences in the backend database */}
         <button type="submit" className="save-button" onClick={handleSubmit}>
-  Save Preferences
-</button>
-
+          Save Preferences
+        </button>
       </form>
     </div>
   );
