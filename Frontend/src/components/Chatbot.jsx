@@ -59,6 +59,7 @@ function Chatbot() {
     setMessages((prev) => [...prev, userMessage]);
 
     // Simulate bot response (replace with real API call if needed)
+    // TODO: Get the response from the backend
     const botResponse = { sender: "bot", text: "This is a placeholder reply." };
     setMessages((prev) => [...prev, botResponse]);
   };
@@ -110,6 +111,7 @@ function Chatbot() {
           onChange={(e) => setUserInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSendButtonClick()}
         />
+        {/*// TODO: Send user message to backend */}
         <button onClick={handleSendButtonClick} className="send-button">
           Send
         </button>
