@@ -51,3 +51,40 @@
     border-radius: 5px;
     cursor: pointer;
 }
+
+.logout-button:hover {
+    background-color: #6D45C6;
+}
+
+/* Remove default bullets, padding, and margin from the list */
+.task-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Each list item spaced out slightly */
+.task-item {
+    margin-bottom: 0.5rem;
+}
+
+/* Align checkbox and text neatly */
+.task-item label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    /* Space between checkbox and text */
+}
+
+/* Optional styling for the checkbox */
+.task-checkbox {
+    /* For modern browsers, accent-color can style the checkbox color */
+    accent-color: #6c63ff;
+    cursor: pointer;
+}
+
+/* Bold the subject/title */
+.task-title {
+    font-weight: bold;
+    margin-right: 0.25rem;
+}

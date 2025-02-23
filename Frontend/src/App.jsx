@@ -1,6 +1,4 @@
-// App.jsx
 import React, { useState, useEffect } from "react";
-// import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 import Preferences from "./components/Preferences";
@@ -13,7 +11,7 @@ function App() {
   const [priorities, setPriorities] = useState(null);
   const [isFirstLogin, setIsFirstLogin] = useState(null);
 
-  // TODO: Need to change this to use the backend database
+  // Handle user login
   const handleLogin = (userData) => {
     console.log("User logged in:", userData);
     setUser(userData);
@@ -29,7 +27,7 @@ function App() {
     }
   };
 
-  // TODO: Need to change this to use the backend database
+  // Handle saving preferences
   const handleSavePreferences = (newPriorities) => {
     console.log("Saving preferences:", newPriorities);
     setPriorities(newPriorities);
@@ -41,26 +39,31 @@ function App() {
   const handleLogout = () => {
     auth.signOut()
       .then(() => {
-        console.log('User logged out');
+        console.log("User logged out");
         setUser(null);
       })
-      .catch(error => {
-        console.error('Error during logout:', error);
+      .catch((error) => {
+        console.error("Error during logout:", error);
       });
   };
 
   return (
     <div className="App">
       <h1>Hack Ireland 2025</h1>
-      <h2>Group 37</h2>
-      <EmailAssistantAnimation />
 
-      <br />
-
+      {/* If user is NOT logged in: show Group 37 + animated icon */}
       {!user ? (
-        <Login onLogin={handleLogin} />
-      ) : (
         <>
+          <h2>Group 37</h2>
+          <EmailAssistantAnimation />
+          <br />
+          <Login onLogin={handleLogin} />
+        </>
+      ) : (
+        // If user IS logged in: show a simpler header
+        <>
+          <h2>AI Task Assistant</h2>
+          <br />
           {isFirstLogin === null ? (
             <p>Loading...</p>
           ) : isFirstLogin ? (

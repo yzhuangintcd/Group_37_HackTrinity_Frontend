@@ -26,6 +26,7 @@ const EmailAssistantAnimation = () => {
   return (
     <div className="animation-container">
       <h3 className="assistant-title">AI Task Assistant</h3>
+      {/* TranQuill: This is the title of the assistant */}
 
       <div className="icon-and-notif">
         {/* Conditionally render the bubble if count > 0 */}
