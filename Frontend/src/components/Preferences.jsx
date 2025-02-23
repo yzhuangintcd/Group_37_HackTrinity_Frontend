@@ -1,5 +1,6 @@
 // Preferences.jsx
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import PropTypes from 'prop-types';
 import { ENDPOINTS } from "../constants/endpoints"; // adjust path as needed
 import "./Preferences.css";
 
@@ -103,6 +104,14 @@ const Preferences = ({ onSave, priorities, userId }) => {
       </form>
     </div>
   );
+};
+
+Preferences.propTypes = {
+  onSave: PropTypes.func.isRequired,
+  priorities: PropTypes.shape({
+    categories: PropTypes.arrayOf(PropTypes.string)
+  }),
+  userId: PropTypes.string
 };
 
 export default Preferences;

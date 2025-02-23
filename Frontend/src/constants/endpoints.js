@@ -1,21 +1,68 @@
 // src/constants/endpoints.js
 
-// Option A: Hardcode your backend base URL here
-const BASE_URL = "https://your-backend.com/api";
+// Base URL configuration
+const BASE_URL = "http://localhost:8000"; // Default to localhost, override with environment variable if needed
 
-// Option B: Use an environment variable (e.g., Vite) for easier config
-// const BASE_URL = import.meta.env.VITE_BACKEND_URL;
-
+// Main API endpoints
 export const ENDPOINTS = {
-  // Used in Dashboard.jsx for "Yes" in EmailPermissionModal
-  ALLOW_EMAIL_ACCESS: `${BASE_URL}/allow-email-access`,
+  // Core interaction endpoint
+  PROCESS_INPUT: `${BASE_URL}/process`,
 
-  // Used in Dashboard.jsx to fetch tasks
+  // Task management endpoints
   GET_TASKS: `${BASE_URL}/tasks`,
+  CREATE_TASK: `${BASE_URL}/tasks`,
+  GET_TASK: (taskId) => `${BASE_URL}/tasks/${taskId}`,
+  UPDATE_TASK_STATUS: (taskId) => `${BASE_URL}/tasks/${taskId}/status`,
+  UPDATE_TASK_URGENCY: (taskId) => `${BASE_URL}/tasks/${taskId}/urgency`,
+  UPDATE_TASK_NOTES: (taskId) => `${BASE_URL}/tasks/${taskId}/notes`,
+  UPDATE_TASK_DESCRIPTION: (taskId) => `${BASE_URL}/tasks/${taskId}/description`,
 
-  // Used in Dashboard.jsx to fetch unread email count
-  GET_UNREAD_EMAIL_COUNT: `${BASE_URL}/emails/unread-count`,
+  // Profile management endpoints
+  GET_PROFILE: `${BASE_URL}/profile`,
+  UPDATE_PROFILE: `${BASE_URL}/profile`,
+  GET_RAW_PROFILE: `${BASE_URL}/profile/raw`,
+  CLEAR_PROFILE: `${BASE_URL}/profile`,
 
-  // Used in Chatbot.jsx to send user messages and get bot replies
-  CHATBOT: `${BASE_URL}/chatbot`,
+  // Gmail integration endpoints
+  GMAIL_AUTH: `${BASE_URL}/gmail/auth`,
+  GMAIL_CALLBACK: `${BASE_URL}/gmail/callback`,
+  GMAIL_STATUS: `${BASE_URL}/gmail/status`,
+  GMAIL_PROCESS: `${BASE_URL}/gmail/process`,
+  GMAIL_REVOKE: `${BASE_URL}/gmail/revoke`,
+
+  // System endpoints
+  HEALTH_CHECK: `${BASE_URL}/health`,
+
+  // Make BASE_URL available for other modules
+  BASE_URL
+};
+
+// HTTP request configurations
+export const REQUEST_CONFIG = {
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  timeoutMs: 30000 // 30 second timeout
+};
+
+// WebSocket configuration (if needed later)
+export const WS_CONFIG = {
+  url: `ws://${BASE_URL.split("//")[1]}/ws`,
+  reconnectIntervalMs: 3000
+};
+
+// Task urgency levels
+export const URGENCY_LEVELS = {
+  LOW: 1,
+  MEDIUM_LOW: 2,
+  MEDIUM: 3,
+  MEDIUM_HIGH: 4,
+  HIGH: 5
+};
+
+// Task status types
+export const TASK_STATUS = {
+  PENDING: 'pending',
+  COMPLETED: 'completed',
+  HALF_COMPLETED: 'half-completed'
 };

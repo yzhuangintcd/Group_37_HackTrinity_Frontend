@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ENDPOINTS } from "../constants/endpoints"; // Import your endpoints
 import "./Chatbot.css";
 import VoiceWave from "./VoiceWave";
