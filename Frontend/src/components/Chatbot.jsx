@@ -75,6 +75,7 @@ function Chatbot() {
       const botResponse = { sender: "bot", text: data.reply || "No response" };
       setMessages((prev) => [...prev, botResponse]);
     } catch (error) {
+      alert("Temporary error, the endpoint is not yet implemented");
       console.error("Error getting bot response:", error);
       // Optionally show an error message in the chat
       const errorMessage = {

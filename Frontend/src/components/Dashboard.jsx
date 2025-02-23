@@ -39,6 +39,7 @@ const Dashboard = ({ user, priorities, onLogout }) => {
       })
       .catch((error) => {
         console.error("Error fetching tasks:", error);
+        alert("Temporary error, the endpoint is not yet implemented");
       });
 
     // 2) Fetch unread email count
@@ -93,6 +94,7 @@ const Dashboard = ({ user, priorities, onLogout }) => {
   };
 
   // Toggle each task's completion (local only, or do a PATCH/POST to backend if needed)
+  // ! The logic for this may need to be changed
   const handleTaskCheck = (taskId) => {
     const newValue = !taskCompletion[taskId];
     setTaskCompletion((prev) => ({ ...prev, [taskId]: newValue }));

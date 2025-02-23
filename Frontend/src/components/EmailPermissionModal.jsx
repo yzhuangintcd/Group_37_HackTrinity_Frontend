@@ -31,6 +31,7 @@ const EmailPermissionModal = ({ userId, onPermissionGranted, onCancel }) => {
       })
       .catch((error) => {
         console.error("Error during allow-email-access:", error);
+        alert("Temporary error, the endpoint is not yet implemented");
       });
   };
 

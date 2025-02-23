@@ -69,6 +69,7 @@ const Preferences = ({ onSave, priorities, userId }) => {
       })
       .catch((error) => {
         console.error("Error saving preferences:", error);
+        alert("Temporary error, the endpoint is not yet implemented");
       });
   };
 
