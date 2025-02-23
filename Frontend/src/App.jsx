@@ -13,6 +13,7 @@ function App() {
   const [priorities, setPriorities] = useState(null);
   const [isFirstLogin, setIsFirstLogin] = useState(null);
 
+  // TODO: Need to change this to use the backend database
   const handleLogin = (userData) => {
     console.log("User logged in:", userData);
     setUser(userData);
@@ -28,6 +29,7 @@ function App() {
     }
   };
 
+  // TODO: Need to change this to use the backend database
   const handleSavePreferences = (newPriorities) => {
     console.log("Saving preferences:", newPriorities);
     setPriorities(newPriorities);
