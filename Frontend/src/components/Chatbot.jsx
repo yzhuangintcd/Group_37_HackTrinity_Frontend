@@ -1,5 +1,5 @@
-// Chatbot.jsx
 import React, { useState, useEffect, useRef } from "react";
+import { ENDPOINTS } from "../constants/endpoints"; // Import your endpoints
 import "./Chatbot.css";
 import VoiceWave from "./VoiceWave";
 
@@ -27,8 +27,7 @@ function Chatbot() {
         console.log("Transcript:", transcript);
         setListening(false);
 
-        // Automatically send the recognized speech to the chatbot
-        // handleSendMessage(transcript);
+        // Instead of auto-sending, put recognized text into input for editing
         setUserInput(transcript);
       };
 
@@ -44,24 +43,46 @@ function Chatbot() {
   }, []);
 
   // Handle sending a message (either from user typing or speech)
-  const handleSendMessage = (speechText) => {
+  const handleSendMessage = async (speechText) => {
     // If speechText is provided, use that; otherwise, use userInput state
     const finalText = speechText || userInput;
     if (!finalText.trim()) return;
 
-    // Create user message
+    // 1) Add user's message to the conversation
     const userMessage = { sender: "user", text: finalText };
-
-    // Clear the input box (if this was from typing)
+    setMessages((prev) => [...prev, userMessage]);
     setUserInput("");
 
-    // Add user message to conversation
-    setMessages((prev) => [...prev, userMessage]);
+    // 2) Send user's message to the backend (POST to chatbot endpoint)
+    try {
+      const response = await fetch(ENDPOINTS.CHATBOT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: finalText }),
+      });
 
-    // Simulate bot response (replace with real API call if needed)
-    // TODO: Get the response from the backend
-    const botResponse = { sender: "bot", text: "This is a placeholder reply." };
-    setMessages((prev) => [...prev, botResponse]);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch bot response: ${response.status}`);
+      }
+
+      // Suppose the backend returns JSON like { reply: "Hello from the bot" }
+      const data = await response.json();
+      console.log("Bot response data:", data);
+
+      // 3) Add bot response to the conversation
+      const botResponse = { sender: "bot", text: data.reply || "No response" };
+      setMessages((prev) => [...prev, botResponse]);
+    } catch (error) {
+      console.error("Error getting bot response:", error);
+      // Optionally show an error message in the chat
+      const errorMessage = {
+        sender: "bot",
+        text: "Sorry, I couldn't get a response from the server.",
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    }
   };
 
   // Handle manual text input (typing + "Send" button)
@@ -111,7 +132,6 @@ function Chatbot() {
           onChange={(e) => setUserInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSendButtonClick()}
         />
-        {/*// TODO: Send user message to backend */}
         <button onClick={handleSendButtonClick} className="send-button">
           Send
         </button>

@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
+import { ENDPOINTS } from "../constants/endpoints"; // Adjust path if needed
 import Preferences from "./Preferences";
 import EmailPermissionModal from "./EmailPermissionModal";
 import "./Dashboard.css";
 import Chatbot from "./Chatbot";
 
-const randomPlaceholder = Math.floor(Math.random() * 100);
-
 const Dashboard = ({ user, priorities, onLogout }) => {
   const [prioritiesState, setPrioritiesState] = useState(null);
   const [showModal, setShowModal] = useState(false);
-
-  // NEW: track whether each task is checked
   const [taskCompletion, setTaskCompletion] = useState({});
+  const [tasks, setTasks] = useState([]);
+  const [unreadEmailCount, setUnreadEmailCount] = useState(0);
 
+  // Fetch localStorage priorities, then show modal if found
   useEffect(() => {
     const savedPriorities = JSON.parse(localStorage.getItem("userPriorities"));
     if (savedPriorities) {
@@ -21,22 +21,64 @@ const Dashboard = ({ user, priorities, onLogout }) => {
     }
   }, []);
 
+  // Example: Fetch tasks + unread email count from backend
+  useEffect(() => {
+    // 1) Fetch tasks
+    fetch(ENDPOINTS.GET_TASKS)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`Failed to fetch tasks: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log("Fetched tasks:", data);
+        // data could be an array of task objects, e.g.:
+        // [{ id: 1, subject: "Project Update", snippet: "..."}]
+        setTasks(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching tasks:", error);
+      });
+
+    // 2) Fetch unread email count
+    fetch(ENDPOINTS.GET_UNREAD_EMAIL_COUNT)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`Failed to fetch unread email count: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log("Fetched unread email count:", data);
+        // Suppose data.count is the unread email count
+        setUnreadEmailCount(data.count || 0);
+      })
+      .catch((error) => {
+        console.error("Error fetching unread email count:", error);
+      });
+  }, []);
+
+  // Handle user permission for email access
   const handlePermission = (isAllowed) => {
     if (isAllowed) {
-      // Placeholder fetch call to your backend
-      fetch("https://your-backend.com/api/allow-email-access", {
+      // POST to the ALLOW_EMAIL_ACCESS endpoint
+      fetch(ENDPOINTS.ALLOW_EMAIL_ACCESS, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           userId: user.id || "testuser1",
           permission: true,
         }),
       })
-        .then((response) => response.json())
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`Failed to allow email access: ${response.status}`);
+          }
+          return response.json();
+        })
         .then((data) => {
-          console.log("Backend Response:", data);
+          console.log("Backend Response (email access):", data);
         })
         .catch((error) => console.error("Error:", error));
 
@@ -44,36 +86,45 @@ const Dashboard = ({ user, priorities, onLogout }) => {
     }
   };
 
+  // If user denies permission, close modal + log them out
   const handleCancelPermission = () => {
     setShowModal(false);
-    onLogout(); // Logs the user out if they deny permission
+    onLogout();
   };
 
-  // Hardcoded placeholders for demonstration
-  const unreadEmailCount = randomPlaceholder;
-  const importantEmails = [
-    { id: 1, subject: "Project Update", snippet: "Important update about the project." },
-    { id: 2, subject: "Family Dinner", snippet: "Don't forget our Dinner tomorrow." },
-    { id: 3, subject: "Invoice Due", snippet: "Your invoice is due next week." },
-  ];
-
-  // Handler to toggle each task's completion
+  // Toggle each task's completion (local only, or do a PATCH/POST to backend if needed)
   const handleTaskCheck = (taskId) => {
-    setTaskCompletion((prev) => ({
-      ...prev,
-      [taskId]: !prev[taskId],
-    }));
+    const newValue = !taskCompletion[taskId];
+    setTaskCompletion((prev) => ({ ...prev, [taskId]: newValue }));
+  
+    // Example PATCH request to mark the task as completed
+    fetch(`${ENDPOINTS.GET_TASKS}/${taskId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ completed: newValue }),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error(`Failed to update task: ${res.status}`);
+        return res.json();
+      })
+      .then((updatedTask) => {
+        console.log("Updated task:", updatedTask);
+      })
+      .catch((error) => console.error(error));
   };
+
 
   return (
     <div className="dashboard-page">
       {/* Left column: Dashboard Card */}
       <div className="dashboard-card">
         <h2>Profile Overview</h2>
+
         {prioritiesState ? (
           <div>
             <p>
-              <strong>Priorities:</strong> {prioritiesState.categories.join(", ")}
+              <strong>Priorities:</strong>{" "}
+              {prioritiesState.categories.join(", ")}
             </p>
           </div>
         ) : (
@@ -86,42 +137,44 @@ const Dashboard = ({ user, priorities, onLogout }) => {
           </p>
           <div className="important-emails">
             <h4>Tasks</h4>
-          <ul className="task-list">
-            {importantEmails.map((email) => (
-              <li key={email.id} className="task-item">
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={!!taskCompletion[email.id]}
-                    onChange={() => handleTaskCheck(email.id)}
-                    className="task-checkbox"
-                  />
-                  <strong className="task-title">{email.subject}</strong>: {email.snippet}
-                </label>
-              </li>
-            ))}
-          </ul>
-
+            <ul className="task-list">
+              {tasks.map((task) => (
+                <li key={task.id} className="task-item">
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={!!taskCompletion[task.id]}
+                      onChange={() => handleTaskCheck(task.id)}
+                      className="task-checkbox"
+                    />
+                    <strong className="task-title">{task.subject}</strong>:{" "}
+                    {task.snippet}
+                  </label>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
-        <button onClick={onLogout} className="logout-button">Log Out</button>
+        <button onClick={onLogout} className="logout-button">
+          Log Out
+        </button>
       </div>
 
       {/* Right column: Preferences Card */}
       <div className="preferences-card">
-        <Preferences
-          onSave={setPrioritiesState}
-          priorities={prioritiesState}
-        />
+        <Preferences onSave={setPrioritiesState} priorities={prioritiesState} />
       </div>
 
+      {/* Email Permission Modal */}
       {showModal && (
         <EmailPermissionModal
           onPermission={handlePermission}
           onCancel={handleCancelPermission}
         />
       )}
+
+      {/* Chatbot */}
       <Chatbot />
     </div>
   );
