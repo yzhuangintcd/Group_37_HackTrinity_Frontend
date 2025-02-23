@@ -42,7 +42,7 @@
 
     /* Slide from right (100%) to left (0%) over 3s. 
      "linear" ensures a constant speed with no pause. */
-    animation: passThrough 2s linear forwards;
+    animation: slideIn 2s forwards;
 }
 
 /* The email icon itself */
@@ -109,5 +109,15 @@
 
     100% {
         opacity: 1;
+    }
+}
+
+.fade-out {
+    animation: fadeOut 0.5s forwards;
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
     }
 }
