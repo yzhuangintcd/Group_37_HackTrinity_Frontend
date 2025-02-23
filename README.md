@@ -1,2 +1,3 @@
 # Group_37_HackTrinity_Frontend
-Frontend for Hack Ireland Group 37
+
+Moved to https://etm-code.github.io/tranquilsite/
